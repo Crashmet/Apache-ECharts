@@ -147,6 +147,10 @@ const option = {
   grid: {
     bottom: 100,
   },
+  dataset: {
+    dimensions: [],
+    source: [],
+  },
   series: [
     {
       name: 'В программе ИТ П.',
@@ -220,13 +224,31 @@ function preparationData(data) {
       xAxisData.push(el.period);
     }
   });
+  console.log(data);
+  //   dataset: {
+  //     dimensions: ['period', '2015', '2016', '2017'],
+  //     source: [
+  //         {period: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
+  //         {period: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
+  //         {period: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
+  //         {period: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1}
+  //     ]
+  // }
+  const dimensions = ['period'];
+  const source = [];
 
   data.forEach((el) => {
-    let flag = xAxisData.find((item) => item === el.period);
+    let flag = source.find((item) => el.period === item.period);
     if (!flag) {
-      xAxisData.push(el.period);
+      dimensions.push(el.period);
+      source.push({ period: el.period, [el.name]: el.value });
+    } else {
+      let i = source.findIndex((item) => el.period === item.period);
+      source[i][el.name] = el.value;
     }
   });
+
+  console.log(source);
 
   data.forEach((el) => {
     if (el.name === 'В программе ИТ') {
