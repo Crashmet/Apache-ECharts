@@ -158,7 +158,6 @@ const option = {
       emphasis: emphasisStyle,
       data: data1,
       color: ['#0078D2'],
-      barGap: '5%',
       barMaxWidth: '30%',
       label: {
         show: false,
@@ -176,6 +175,7 @@ const option = {
       emphasis: emphasisStyle,
       data: data2,
       color: ['#56B9F2'],
+      barMaxWidth: '30%',
       label: {
         show: true,
         fontWeight: 'bold',
@@ -210,6 +210,7 @@ const option = {
       emphasis: emphasisStyle,
       data: data4,
       color: ['#22C38E'],
+      barMaxWidth: '30%',
       label: {
         show: true,
         fontWeight: 'bold',
