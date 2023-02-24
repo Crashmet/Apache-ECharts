@@ -225,9 +225,7 @@ const option = {
 };
 
 function preparationData(data) {
-  const sortDataName = [...data];
-
-  sortDataName.sort((a, b) => (a.name > b.name ? 1 : -1));
+  const sortDataName = [...data].sort((a, b) => a.name.localeCompare(b.name));
 
   sortDataName.forEach((el) => {
     let flag = dataName.find((item) => el.name === item);
