@@ -2,13 +2,13 @@ import { data } from './data.js';
 
 const myChart = echarts.init(document.getElementById('grid'));
 
-let xAxisData = [];
-let data1 = [];
-let data2 = [];
-let data3 = [];
-let data4 = [];
+const xAxisData = [];
+const data1 = [];
+const data2 = [];
+const data3 = [];
+const data4 = [];
 
-var emphasisStyle = {
+const emphasisStyle = {
   itemStyle: {
     shadowBlur: 10,
     shadowColor: 'rgba(0,0,0,0.3)',
@@ -40,8 +40,6 @@ const option = {
         params[0].name +
         `</p>` +
         '<br/>';
-
-      // console.log(params);
 
       for (let i = 0; i < params.length; i++) {
         if (params[i].seriesName.startsWith('В ')) {
@@ -138,15 +136,16 @@ const option = {
       lineStyle: { color: ' rgba(0, 65, 102, 0.3)' },
     },
     axisLabel: {
+      formatter: function (value) {
+        return value / 100;
+      },
       color: 'rgba(0, 32, 51, 0.7)',
     },
     splitLine: {
       show: false,
     },
   },
-  grid: {
-    bottom: 100,
-  },
+  grid: {},
   dataset: {
     dimensions: [],
     source: [],
@@ -162,12 +161,11 @@ const option = {
       barGap: '5%',
       barMaxWidth: '30%',
       label: {
-        show: true,
+        show: false,
+        fontWeight: 'bold',
         position: 'top',
         formatter: (params) => {
-          console.log(params);
-          // let percent = Math.round((value1 / (value1 + value2)) * 100);
-          return;
+          return params.value + data2[params.dataIndex];
         },
       },
     },
@@ -178,6 +176,14 @@ const option = {
       emphasis: emphasisStyle,
       data: data2,
       color: ['#56B9F2'],
+      label: {
+        show: true,
+        fontWeight: 'bold',
+        position: 'top',
+        formatter: (params) => {
+          return params.value + data1[params.dataIndex];
+        },
+      },
     },
     {
       name: 'Вне программ ИТ П.',
@@ -186,19 +192,19 @@ const option = {
       emphasis: emphasisStyle,
       data: data3,
       color: ['#00724C'],
+      barMaxWidth: '30%',
       label: {
-        show: true,
+        show: false,
+        fontWeight: 'bold',
         position: 'top',
         formatter: (params) => {
-          console.log(params.value[params.encode.y[1]]);
-          // let percent = Math.round((value1 / (value1 + value2)) * 100);
-          return;
+          return params.value + data4[params.dataIndex];
         },
       },
-      barMaxWidth: '30%',
     },
     {
       name: 'Вне программ ЦП П.',
+      id: 'bar-4',
       type: 'bar',
       stack: 'two',
       emphasis: emphasisStyle,
@@ -206,11 +212,10 @@ const option = {
       color: ['#22C38E'],
       label: {
         show: true,
+        fontWeight: 'bold',
         position: 'top',
         formatter: (params) => {
-          // console.log(params);
-          // let percent = Math.round((value1 / (value1 + value2)) * 100);
-          return;
+          return params.value + data3[params.dataIndex];
         },
       },
     },
@@ -224,31 +229,6 @@ function preparationData(data) {
       xAxisData.push(el.period);
     }
   });
-  console.log(data);
-  //   dataset: {
-  //     dimensions: ['period', '2015', '2016', '2017'],
-  //     source: [
-  //         {period: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
-  //         {period: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
-  //         {period: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
-  //         {period: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1}
-  //     ]
-  // }
-  const dimensions = ['period'];
-  const source = [];
-
-  data.forEach((el) => {
-    let flag = source.find((item) => el.period === item.period);
-    if (!flag) {
-      dimensions.push(el.period);
-      source.push({ period: el.period, [el.name]: el.value });
-    } else {
-      let i = source.findIndex((item) => el.period === item.period);
-      source[i][el.name] = el.value;
-    }
-  });
-
-  console.log(source);
 
   data.forEach((el) => {
     if (el.name === 'В программе ИТ') {
@@ -264,4 +244,5 @@ function preparationData(data) {
 }
 
 preparationData(data);
+
 myChart.setOption(option);
