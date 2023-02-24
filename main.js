@@ -7,6 +7,7 @@ const data1 = [];
 const data2 = [];
 const data3 = [];
 const data4 = [];
+const dataName = [];
 
 const emphasisStyle = {
   itemStyle: {
@@ -224,6 +225,17 @@ const option = {
 };
 
 function preparationData(data) {
+  const sortDataName = [...data];
+
+  sortDataName.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+  sortDataName.forEach((el) => {
+    let flag = dataName.find((item) => el.name === item);
+    if (!flag) {
+      dataName.push(el.name);
+    }
+  });
+
   data.forEach((el) => {
     let flag = xAxisData.find((item) => item === el.period);
     if (!flag) {
@@ -232,13 +244,13 @@ function preparationData(data) {
   });
 
   data.forEach((el) => {
-    if (el.name === 'В программе ИТ') {
+    if (el.name === dataName[0]) {
       data1.push(el.value);
-    } else if (el.name === 'В программе ЦП') {
+    } else if (el.name === dataName[1]) {
       data2.push(el.value);
-    } else if (el.name === 'Вне программ ЦП') {
+    } else if (el.name === dataName[2]) {
       data3.push(el.value);
-    } else if (el.name === 'Вне программ ИТ') {
+    } else if (el.name === dataName[3]) {
       data4.push(el.value);
     }
   });
