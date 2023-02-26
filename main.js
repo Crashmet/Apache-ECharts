@@ -7,6 +7,7 @@ const data1 = [];
 const data2 = [];
 const data3 = [];
 const data4 = [];
+const dataLength = [];
 const dataName = [];
 
 const emphasisStyle = {
@@ -27,7 +28,6 @@ const option = {
   toolbox: {},
   tooltip: {
     trigger: 'axis',
-    valueFormatter: (value) => value + ' шт.',
     formatter: (params) => {
       let value1 = 0;
       let value2 = 0;
@@ -49,8 +49,13 @@ const option = {
           value2 += params[i].value;
         }
       }
+
       percent1 = Math.round((value1 / (value1 + value2)) * 100);
       percent2 = Math.round((value2 / (value1 + value2)) * 100);
+
+      if (value1 === 0 && value2 === 0) {
+        return;
+      }
 
       if (percent1 !== 0) {
         tooltipMsg1 =
@@ -161,11 +166,12 @@ const option = {
       color: ['#0078D2'],
       barMaxWidth: '30%',
       label: {
-        show: false,
+        show: true,
         fontWeight: 'bold',
         position: 'top',
         formatter: (params) => {
-          return params.value + data2[params.dataIndex];
+          valueLebelOne1.push(params.value);
+          return '';
         },
       },
     },
@@ -182,7 +188,23 @@ const option = {
         fontWeight: 'bold',
         position: 'top',
         formatter: (params) => {
-          return params.value + data1[params.dataIndex];
+          valueLebelOne2.push(params.value);
+          return '';
+        },
+      },
+    },
+    {
+      type: 'bar',
+      stack: 'one',
+      barMaxWidth: '30%',
+      data: dataLength,
+      label: {
+        show: true,
+        fontWeight: 'bold',
+        position: 'top',
+        formatter: (params) => {
+          let answer = showValueLebelOne();
+          return answer;
         },
       },
     },
@@ -195,17 +217,17 @@ const option = {
       color: ['#00724C'],
       barMaxWidth: '30%',
       label: {
-        show: false,
+        show: true,
         fontWeight: 'bold',
         position: 'top',
         formatter: (params) => {
-          return params.value + data4[params.dataIndex];
+          valueLebelTwo1.push(params.value);
+          return '';
         },
       },
     },
     {
       name: 'Вне программ ЦП П.',
-      id: 'bar-4',
       type: 'bar',
       stack: 'two',
       emphasis: emphasisStyle,
@@ -217,7 +239,23 @@ const option = {
         fontWeight: 'bold',
         position: 'top',
         formatter: (params) => {
-          return params.value + data3[params.dataIndex];
+          valueLebelTwo2.push(params.value);
+          return '';
+        },
+      },
+    },
+    {
+      type: 'bar',
+      stack: 'two',
+      barMaxWidth: '30%',
+      data: dataLength,
+      label: {
+        show: true,
+        fontWeight: 'bold',
+        position: 'top',
+        formatter: (params) => {
+          let answer = showValueLebelTwo();
+          return answer;
         },
       },
     },
@@ -244,6 +282,7 @@ function preparationData(data) {
   data.forEach((el) => {
     if (el.name === dataName[0]) {
       data1.push(el.value);
+      dataLength.push(0);
     } else if (el.name === dataName[1]) {
       data2.push(el.value);
     } else if (el.name === dataName[2]) {
@@ -252,6 +291,54 @@ function preparationData(data) {
       data4.push(el.value);
     }
   });
+}
+
+let valueLebelOne1 = [];
+let valueLebelOne2 = [];
+let valueLebelOneInc = 0;
+
+function showValueLebelOne() {
+  let num1 = valueLebelOne1[valueLebelOneInc] ?? 0;
+  let num2 = valueLebelOne2[valueLebelOneInc] ?? 0;
+  let valueLebelOne = num1 + num2;
+
+  valueLebelOneInc += 1;
+
+  if (valueLebelOneInc === 7) {
+    valueLebelOneInc = 0;
+    valueLebelOne1 = [];
+    valueLebelOne2 = [];
+  }
+
+  if (valueLebelOne === 0) {
+    return '';
+  } else {
+    return valueLebelOne;
+  }
+}
+
+let valueLebelTwo1 = [];
+let valueLebelTwo2 = [];
+let valueLebelTwoInc = 0;
+
+function showValueLebelTwo() {
+  let num1 = valueLebelTwo1[valueLebelTwoInc] ?? 0;
+  let num2 = valueLebelTwo2[valueLebelTwoInc] ?? 0;
+  let valueLebelTwo = num1 + num2;
+
+  valueLebelTwoInc += 1;
+
+  if (valueLebelTwoInc === 7) {
+    valueLebelTwoInc = 0;
+    valueLebelTwo1 = [];
+    valueLebelTwo2 = [];
+  }
+
+  if (valueLebelTwo === 0) {
+    return '';
+  } else {
+    return valueLebelTwo;
+  }
 }
 
 preparationData(data);
